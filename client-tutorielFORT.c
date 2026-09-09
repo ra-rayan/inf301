@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <string.h>
-
+void to_upper(char *str){for(int i=0;str[i]!= '\0';i++){str[i]=toupper(str[i]);};}
 int main() {
     char reponse[MAXREP];
     // Affiche les échanges avec le serveur (false pour désactiver)
@@ -19,8 +19,8 @@ int main() {
     envoyer("depart");
     envoyer("OK");
     envoyer_recevoir("OUI",reponse);
-    envoyer_recevoir(toupper(reponse),reponse);
-    
+    to_upper(reponse);
+    envoyer_recevoir(reponse,reponse);
     printf ("Fin d'envoi des messages.\n");
     printf ("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
     deconnexion();

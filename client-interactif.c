@@ -29,8 +29,9 @@
 const char *login = "12518371";
 const char *mdp = "RAHMANI";
 
+
 /* Passez la variable à `false` pour ne plus rejouer l'introduction */
-bool introduction = true;
+bool introduction = false;
 /* bool introduction = false; */
 
 

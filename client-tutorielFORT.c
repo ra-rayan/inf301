@@ -21,6 +21,16 @@ int main() {
     envoyer_recevoir("OUI",reponse);
     to_upper(reponse);
     envoyer_recevoir(reponse,reponse);
+    to_upper(reponse);
+    envoyer_recevoir(reponse,reponse);
+        to_upper(reponse);
+    envoyer_recevoir(reponse,reponse);
+        to_upper(reponse);
+    envoyer_recevoir(reponse,reponse);
+    to_upper(reponse);
+    envoyer_recevoir(reponse,reponse);
+    to_upper(reponse);
+    envoyer_recevoir(reponse,reponse);
     printf ("Fin d'envoi des messages.\n");
     printf ("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
     deconnexion();

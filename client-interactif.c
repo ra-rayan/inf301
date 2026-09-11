@@ -26,8 +26,8 @@
 /*
    Modifiez les variables ci-dessous: mettez vos identifiant et mot de passe
 */
-const char *login = "<login>";
-const char *mdp = "<mot de passe>";
+const char *login = "12518371";
+const char *mdp = "RAHMANI";
 
 /* Passez la variable à `false` pour ne plus rejouer l'introduction */
 bool introduction = true;

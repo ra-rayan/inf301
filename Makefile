@@ -2,7 +2,7 @@
 CC=clang
 CFLAGS=-g -Wall -Wextra -Werror -gdwarf-4
 
-EXEC=client-tutoriel client-interactif client-tutorielFORT
+EXEC=client-tutoriel client-interactif client-tutorielFORT client-projetX
 
 # Utilisé uniquement si exécution sur Caseine.
 # Pour changer le programme lancé par Caseine, modifiez la ligne ci-dessous
@@ -16,7 +16,7 @@ client-tutoriel: client-tutoriel.o client.o
 
 client-tutorielFORT: client-tutorielFORT.o client.o
 client.o: client.c client.h
-
+client-projetX: client-projetX.o client.o
 clean:
 	rm -f *.o
 

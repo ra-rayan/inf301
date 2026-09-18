@@ -13,18 +13,26 @@ void remove_first_char(char *str) {
     memmove(str, str + 1, strlen(str));
 }
 
-void move_n_first_char_to_end(char *str, int n) {
-    size_t len;
-    if (str == NULL || str[0] == '\0' || n <= 0) {
+void move_n_first_char_to_end(char *str, int n){
+    if (str == NULL)
         return;
+    int len = strlen(str);
+    if (len == 0)
+        return;
+    if (n >= len)
+    return;
+    char temp[len + 1];
+    int i = n;
+    while (i < len){
+        temp[i - n] = str[i];
+        i++;
     }
-    len = strlen(str);
-    n=n%len;
-    char new[n+1];
-    memmove(new, str, n);
-    for (int i=0;i<n;i++){
-    remove_first_char(str);}
-    strcat(str,new);
+    while (i < len + n){
+        temp[i - n] = str[i - len];
+        i++;
+    }
+    temp[len] = '\0';
+    strcpy(str, temp);
 }
 
 
@@ -40,6 +48,7 @@ int main(){
     envoyer("login 12518371 RAHMANI");
     envoyer("load crypteMove");
     envoyer_recevoir("help",reponse);
+    envoyer("depart");
     char enc[MAXREP] = "";
     while (strlen(reponse)>0){
         
@@ -56,10 +65,8 @@ int main(){
 
 
         remove_first_char(reponse);
-        printf("Message après suppression du premier caractère : %s\n",reponse);
         int x=c%8;
         move_n_first_char_to_end(reponse,x);
-        printf("Message après transformation : %s\n",reponse);
         }
     envoyer(enc);
 

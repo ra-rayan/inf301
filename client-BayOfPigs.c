@@ -1,53 +1,49 @@
 #include "client.h"
 #include <stdio.h>
-#include <ctype.h>
-#include <stdbool.h>
 #include <string.h>
 
-int main() {
+void decrypte_move(const char *enc, char *dest) {
+    dest[0] = '\0';
+    int len_enc = strlen(enc);
 
-    // Affiche les échanges avec le serveur (false pour désactiver)
+    for (int i = len_enc - 1; i >= 0; i--) {
+        char c = enc[i];
+        int x = (unsigned char)c % 8;
+        int len = strlen(dest);
+
+        
+        if (x > 0 && len >= x) {
+            char temp[MAXREP];
+            memcpy(temp, dest + len - x, x);
+            memcpy(temp + x, dest, len - x);
+            temp[len] = '\0';
+            strcpy(dest, temp);
+        }
+
+      
+        memmove(dest + 1, dest, len + 1);
+        dest[0] = c;
+    }
+}
+
+int main(void) {
     show_messages(true);
-
-    // Connexion au serveur AppoLab
     connexion("im2ag-appolab.u-ga.fr");
-    char reponse[MAXREP];
 
-    // Remplacez <identifiant> et <mot de passe> ci dessous.
-    envoyer("login 12518371 RAHMANI");
-    envoyer_recevoir("load BayOfPigs", reponse);
+    char enc[MAXREP];
+    char clair[MAXREP];
 
-    for (int i = 0; reponse[i] != '\0'; i++) {
-        if (reponse[i] >= 'A' && reponse[i] <= 'Z') {
-            reponse[i] = 'A' + (reponse[i] - 'A' - 5 + 26) % 26;
-        } else if (reponse[i] >= 'a' && reponse[i] <= 'z') {
-            reponse[i] = 'a' + (reponse[i] - 'a' - 5 + 26) % 26;
-        }
-    }
+    envoyer("login 12513439 JALLOULI");
+    envoyer("load BayOfPigs");
 
-    printf("Reponse decalee de -5 : %s\n", reponse);
-    envoyer_recevoir("help", reponse);
-    for (int i = 0; reponse[i] != '\0'; i++) {
-        if (reponse[i] >= 'A' && reponse[i] <= 'Z') {
-            reponse[i] = 'A' + (reponse[i] - 'A' - 5 + 26) % 26;
-        } else if (reponse[i] >= 'a' && reponse[i] <= 'z') {
-            reponse[i] = 'a' + (reponse[i] - 'a' - 5 + 26) % 26;
-        }
-    }
-    printf("Reponse decalee de -5 : %s\n", reponse);
+    
+    envoyer_recevoir("depart", enc);
 
-    envoyer_recevoir("depart", reponse);
-    FILE *file = fopen("bayofpigs.txt", "w");
-    if (file == NULL) {
-        perror("Erreur lors de l'ouverture du fichier");
-        return 1;
-    }
-    fprintf(file, "%s", reponse);
-    fclose(file);
+    
+    decrypte_move(enc, clair);
 
-    printf ("Fin d'envoi des messages.\n");
-    printf ("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
+    printf("\nMessage dechiffre :\n%s\n\n", clair);
+
     deconnexion();
-    printf ("Fin de la connection au serveur\n");
     return 0;
 }

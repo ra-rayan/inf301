@@ -1,9 +1,6 @@
 #include "client.h"
 #include <stdio.h>
-#include <ctype.h>
-#include <stdbool.h>
 #include <string.h>
-#include <stdlib.h>
 
 void remove_first_char(char *str) {
     if (str == NULL || str[0] == '\0') {
@@ -17,46 +14,54 @@ void move_n_first_char_to_end(char *str, int n) {
     if (str == NULL || str[0] == '\0' || n <= 0) {
         return;
     }
-
-    int len = strlen(str);
-    if (n >= len) {
+    size_t len = strlen(str);
+    
+    // On sort s'il ne reste pas au moins n caractères
+    if (len < (size_t)n) {
         return;
     }
 
-    char moved[n + 1];
-    memcpy(moved, str, n);
-    moved[n] = '\0';
+    char new[n + 1];
+    memcpy(new, str, n);
+    new[n] = '\0'; //  car memcpy n'ajoute pas de '\0'
     memmove(str, str + n, len - n + 1);
-    strcat(str, moved);
+    strcat(str, new);
 }
 
-int main() {
+int main(void) {
+    // Affiche les échanges avec le serveur (false pour désactiver)
     show_messages(true);
 
+    // Connexion au serveur AppoLab
     connexion("im2ag-appolab.u-ga.fr");
-    char reponse[MAXREP];
-    char enc[MAXREP] = "";
 
-    envoyer("login 12518371 RAHMANI");
+    char reponse[MAXREP];
+    char enc[MAXREP] = ""; 
+
+    envoyer("login 12513439 JALLOULI");
     envoyer("load crypteMove");
     envoyer_recevoir("help", reponse);
-    envoyer("depart");
 
+    int idx_enc = 0;
     while (reponse[0] != '\0') {
+        // STEP 1
         char c = reponse[0];
-        size_t enc_len = strlen(enc);
-        enc[enc_len] = c;
-        enc[enc_len + 1] = '\0';
+        enc[idx_enc++] = c;
+        enc[idx_enc] = '\0';
 
-        remove_first_char(reponse);
+        // STEP 2
+        remove_first_char(reponse);        
         int x = (unsigned char)c % 8;
         move_n_first_char_to_end(reponse, x);
     }
 
+    
+    envoyer("depart");
+
+    
     envoyer(enc);
 
     printf("Fin d'envoi des messages.\n");
-    printf("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
     deconnexion();
     printf("Fin de la connection au serveur\n");
     return 0;

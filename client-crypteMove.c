@@ -13,51 +13,66 @@ void remove_first_char(char *str) {
     memmove(str, str + 1, strlen(str));
 }
 
-void move_n_first_char_to_end(char *str, int n) {
-    if (str == NULL || str[0] == '\0' || n <= 0) {
+void move_n_first_char_to_end(char *str, int n){
+    if (str == NULL)
         return;
-    }
-
     int len = strlen(str);
-    if (n >= len) {
+    if (len == 0)
         return;
+    if (n >= len)
+    return;
+    char temp[len + 1];
+    int i = n;
+    while (i < len){
+        temp[i - n] = str[i];
+        i++;
     }
-
-    char moved[n + 1];
-    memcpy(moved, str, n);
-    moved[n] = '\0';
-    memmove(str, str + n, len - n + 1);
-    strcat(str, moved);
+    while (i < len + n){
+        temp[i - n] = str[i - len];
+        i++;
+    }
+    temp[len] = '\0';
+    strcpy(str, temp);
 }
 
-int main() {
+
+
+int main(){
+    // Affiche les échanges avec le serveur (false pour désactiver)
     show_messages(true);
 
+    // Connexion au serveur AppoLab
     connexion("im2ag-appolab.u-ga.fr");
     char reponse[MAXREP];
-    char enc[MAXREP] = "";
-
+    // Remplacez <identifiant> et <mot de passe> ci dessous.
     envoyer("login 12518371 RAHMANI");
     envoyer("load crypteMove");
-    envoyer_recevoir("help", reponse);
+    envoyer_recevoir("help",reponse);
     envoyer("depart");
+    char enc[MAXREP] = "";
+    while (strlen(reponse)>0){
+        
+        //step 1 ///////
+        
 
-    while (reponse[0] != '\0') {
-        char c = reponse[0];
-        size_t enc_len = strlen(enc);
-        enc[enc_len] = c;
-        enc[enc_len + 1] = '\0';
+        char c= reponse[0];
+        char temp[2];
+        temp[0]=c;
+        temp[1]='\0';
+        strcat(enc,temp);
+
+        //step 2 //////////////////////
+
 
         remove_first_char(reponse);
-        int x = (unsigned char)c % 8;
-        move_n_first_char_to_end(reponse, x);
-    }
-
+        int x=c%8;
+        move_n_first_char_to_end(reponse,x);
+        }
     envoyer(enc);
 
-    printf("Fin d'envoi des messages.\n");
-    printf("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
+    printf ("Fin d'envoi des messages.\n");
+    printf ("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
     deconnexion();
-    printf("Fin de la connection au serveur\n");
+    printf ("Fin de la connection au serveur\n");
     return 0;
 }

@@ -61,7 +61,7 @@ int main(){
         temp[1]='\0';
         strcat(enc,temp);
 
-        //step 2 //////////////////////
+        //step 2 ////////////////
 
 
         remove_first_char(reponse);

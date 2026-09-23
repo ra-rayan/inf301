@@ -1,49 +1,69 @@
 #include "client.h"
 #include <stdio.h>
+#include <ctype.h>
+#include <stdbool.h>
 #include <string.h>
-
-void decrypte_move(const char *enc, char *dest) {
-    dest[0] = '\0';
-    int len_enc = strlen(enc);
-
-    for (int i = len_enc - 1; i >= 0; i--) {
-        char c = enc[i];
-        int x = (unsigned char)c % 8;
-        int len = strlen(dest);
-
-        
-        if (x > 0 && len >= x) {
-            char temp[MAXREP];
-            memcpy(temp, dest + len - x, x);
-            memcpy(temp + x, dest, len - x);
-            temp[len] = '\0';
-            strcpy(dest, temp);
-        }
-
-      
-        memmove(dest + 1, dest, len + 1);
-        dest[0] = c;
+void move_last_n_char_to_first(char *str,int n){
+    if (n<0 || (unsigned long)n>strlen(str)) return;
+    unsigned long i=strlen(str)-n;
+    unsigned long j=0;
+    char temp[MAXREP];
+    while (i<strlen(str)){
+        temp[j]=str[i];
+        j++;
+        i++;
     }
+    i=0;
+    while (j<strlen(str)){
+        temp[j]=str[i];
+        j++;
+        i++;
+    }
+    temp[j]='\0';
+    strcpy(str,temp);
 }
+void add_first_char_to_beginning(char *str,char c){
+    int len=strlen(str);
+    for (int i=len;i>0;i--){
+        str[i]=str[i-1];
+    }
+    str[0]=c;
+    str[len+1]='\0';
+}
+void decrypter(char *enc){
+    int i = strlen(enc)-1;
+    char rep[MAXREP];
+    rep[0]='\0';
+    while (i>=0){ 
+        char c = enc[i];
+        int x=c%8;
+        move_last_n_char_to_first(rep,x);
+        add_first_char_to_beginning(rep,c);
+        enc[i]='\0';
+        i--;
+    }
+    strcpy(enc,rep);
+}
+int main() {
 
-int main(void) {
+    // Affiche les échanges avec le serveur (false pour désactiver)
     show_messages(true);
+
+    // Connexion au serveur AppoLab
     connexion("im2ag-appolab.u-ga.fr");
+    char reponse[MAXREP];
 
-    char enc[MAXREP];
-    char clair[MAXREP];
-
-    envoyer("login 12513439 JALLOULI");
+    // Remplacez <identifiant> et <mot de passe> ci dessous.
+    envoyer("login 12518371 RAHMANI");
     envoyer("load BayOfPigs");
+    envoyer_recevoir("depart", reponse);
+    decrypter(reponse);
+    printf ("\nRéponse du serveur : %s\n", reponse);
+    envoyer(reponse);
 
-    
-    envoyer_recevoir("depart", enc);
-
-    
-    decrypte_move(enc, clair);
-
-    printf("\nMessage dechiffre :\n%s\n\n", clair);
-
+    printf ("Fin d'envoi des messages.\n");
+    printf ("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
     deconnexion();
+    printf ("Fin de la connection au serveur\n");
     return 0;
 }

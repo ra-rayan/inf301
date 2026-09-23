@@ -33,9 +33,10 @@ void add_first_char_to_beginning(char *str,char c){
 void decrypter(char *enc){
     int i = strlen(enc)-1;
     char rep[MAXREP];
+    rep[0]='\0';
     while (i>=0){ 
         char c = enc[i];
-        int x=c%8;
+        int x=(unsigned char)c%8;
         move_last_n_char_to_first(rep,x);
         add_first_char_to_beginning(rep,c);
         enc[i]='\0';

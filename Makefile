@@ -19,7 +19,7 @@ client.o: client.c client.h
 client-projetX: client-projetX.o client.o
 client-crypteMove: client-crypteMove.o client.o
 client-crypteMove2: client-crypteMove2.o client.o
-client-BayOfPigs: client-BayOfPigs.o client.o
+client-BayOfPigs: client-BayOfPigs.o client.o 
 clean:
 	rm -f *.o
 

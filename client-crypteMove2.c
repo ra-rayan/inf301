@@ -12,7 +12,6 @@ void remove_first_char(char *str) {
 
     memmove(str, str + 1, strlen(str));
 }
-
 void move_n_first_char_to_end(char *str, int n){
     if (str == NULL)
         return;
@@ -34,9 +33,20 @@ void move_n_first_char_to_end(char *str, int n){
     temp[len] = '\0';
     strcpy(str, temp);
 }
-
-
-
+void crypte(char *reponse){
+    char enc[MAXREP] = ""; 
+    while (strlen(reponse)>0){
+        char c= reponse[0];
+        char temp[2];
+        temp[0]=c;
+        temp[1]='\0';
+        strcat(enc,temp);
+        remove_first_char(reponse);
+        int x=c%8;
+        move_n_first_char_to_end(reponse,x);
+        }
+    strcpy(reponse,enc);
+    }
 int main(){
     // Affiche les échanges avec le serveur (false pour désactiver)
     show_messages(true);
@@ -49,27 +59,8 @@ int main(){
     envoyer("load crypteMove");
     envoyer_recevoir("help",reponse);
     envoyer("depart");
-    char enc[MAXREP] = "";
-    while (strlen(reponse)>0){
-        
-        //step 1 ///////
-        
-
-        char c= reponse[0];
-        char temp[2];
-        temp[0]=c;
-        temp[1]='\0';
-        strcat(enc,temp);
-
-        //step 2 ////////////////
-
-
-        remove_first_char(reponse);
-        int x=c%8;
-        move_n_first_char_to_end(reponse,x);
-        }
-    envoyer(enc);
-
+    crypte(reponse);
+    envoyer(reponse);
     printf ("Fin d'envoi des messages.\n");
     printf ("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
     deconnexion();

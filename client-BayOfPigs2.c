@@ -4,9 +4,9 @@
 #include <stdbool.h>
 #include <string.h>
 void move_last_n_char_to_first(char *str,int n){
-    if (n<0 || n>strlen(str)) return;
-    int i=strlen(str)-n;
-    int j=0;
+    if (n<0 || (unsigned long)n>strlen(str)) return;
+    unsigned long i=strlen(str)-n;
+    unsigned long j=0;
     char temp[MAXREP];
     while (i<strlen(str)){
         temp[j]=str[i];
@@ -30,16 +30,18 @@ void add_first_char_to_beginning(char *str,char c){
     str[0]=c;
     str[len+1]='\0';
 }
-void decrypter(char *reponse){
-    int len = strlen(reponse);
-    int i = 0;
-    while (reponse[i]!='\0'){ {
-        char c = reponse[i];
+void decrypter(char *enc){
+    int i = strlen(enc)-1;
+    char rep[MAXREP];
+    while (i>=0){ 
+        char c = enc[i];
         int x=c%8;
-        move_last_n_char_to_first(reponse,x);
-        add_first_char_to_beginning(reponse,c);
-        i++;
+        move_last_n_char_to_first(rep,x);
+        add_first_char_to_beginning(rep,c);
+        enc[i]='\0';
+        i--;
     }
+    strcpy(enc,rep);
 }
 int main() {
 
@@ -54,6 +56,9 @@ int main() {
     envoyer("login 12518371 RAHMANI");
     envoyer("load BayOfPigs");
     envoyer_recevoir("depart", reponse);
+    decrypter(reponse);
+    printf ("\nRéponse du serveur : %s\n", reponse);
+    envoyer(reponse);
 
     printf ("Fin d'envoi des messages.\n");
     printf ("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");

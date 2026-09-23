@@ -1,60 +1,50 @@
+#include "client.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <stdbool.h>
 #include <string.h>
-#include <stdlib.h>
-
-void remove_first_char(char *str) {
-    if (str == NULL || str[0] == '\0') {
-        return;
-    }
-
-    memmove(str, str + 1, strlen(str));
-}
-void move_n_first_char_to_end(char *str, int n){
-    if (str == NULL)
-        return;
-    size_t len = strlen(str);
-    if (len == 0)
-        return;
-    if (n >= len)
-    return;
-    char temp[len + 1];
-    size_t i = n;
-    while (i < len){
-        temp[i - n] = str[i];
+void move_last_n_char_to_first(char *str,int n){
+    if (n<0 || (unsigned long)n>strlen(str)) return;
+    unsigned long i=strlen(str)-n;
+    unsigned long j=0;
+    char temp[MAXREP];
+    while (i<strlen(str)){
+        temp[j]=str[i];
+        j++;
         i++;
     }
-    while (i < len + n){
-        temp[i - n] = str[i - len];
+    i=0;
+    while (j<strlen(str)){
+        temp[j]=str[i];
+        j++;
         i++;
     }
-    temp[len] = '\0';
-    strcpy(str, temp);
+    temp[j]='\0';
+    strcpy(str,temp);
 }
-    
-
-int main(){
-    char reponse[100]="Petit message court.";
-    char enc[100] = ""; 
-        while (strlen(reponse)>0){
-        
-        //step 1 ///////
-        
-
-        char c= reponse[0];
-        char temp[2];
-        temp[0]=c;
-        temp[1]='\0';
-        strcat(enc,temp);
-
-        //step 2 //////////////////////
-
-
-        remove_first_char(reponse);
+void add_first_char_to_beginning(char *str,char c){
+    int len=strlen(str);
+    for (int i=len;i>0;i--){
+        str[i]=str[i-1];
+    }
+    str[0]=c;
+    str[len+1]='\0';
+}
+void decrypter(char *enc){
+    int i = strlen(enc)-1;
+    char rep[MAXREP];
+    while (i>=0){ 
+        char c = enc[i];
         int x=c%8;
-        move_n_first_char_to_end(reponse,x);
-        }
-    printf("Message crypté : %s\n",enc);
-    return 0;
+        move_last_n_char_to_first(rep,x);
+        add_first_char_to_beginning(rep,c);
+        enc[i]='\0';
+        i--;
+    }
+    strcpy(enc,rep);
+}
+int main(){
+char enc[MAXREP]="Pee ct mosusriae.ttg";
+decrypter(enc);
+printf("%s\n",enc);
 }

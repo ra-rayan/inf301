@@ -1,5 +1,4 @@
 #include "client.h"
-
 #include <stdio.h>
 #include <ctype.h>
 #include <stdbool.h>
@@ -87,6 +86,24 @@ void decrypter(char *enc){
     }
     strcpy(enc,rep);
 }
+int index(char *str, char c){
+    int i=0;
+    while (str[i]!='\0'){
+        if (str[i]==c) return i;
+        i++;
+    }
+    return -1;
+}
+void crypteSeq(char *reponse){
+    char seq[MAXREP] = "";
+   while (reponse[0]!='\0'){
+        char c = reponse[0];
+        int x = index(seq,c);
+        if (x==-1){
+            
+
+   }
+}
 int main() {
 
     // Affiche les échanges avec le serveur (false pour désactiver)
@@ -98,15 +115,11 @@ int main() {
 
     // Remplacez <identifiant> et <mot de passe> ci dessous.
     envoyer("login 12518371 RAHMANI");
-    envoyer("load BayOfPigs");
+    envoyer_recevoir("load crypteSeq", reponse);
+    decrypter(reponse);
     envoyer_recevoir("depart", reponse);
     decrypter(reponse);
-    printf("Message reçu du serveur : %s\n", reponse);
-    strcpy(reponse, "Patria o muerte");
-    crypte(reponse);
-    envoyer_recevoir(reponse, reponse);
-    decrypter(reponse);
-    envoyer(reponse);
+
 
     printf ("Fin d'envoi des messages.\n");
     printf ("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");

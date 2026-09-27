@@ -3,38 +3,37 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <string.h>
-void remove_first_char(char *str) {
-    if (str == NULL || str[0] == '\0') {
+void remove_first_char(char *str){
+    if(str==NULL || str[0]=='\0'){
         return;
     }
-
-    memmove(str, str + 1, strlen(str));
+    memmove(str,str+1,strlen(str));
 }
-void move_n_first_char_to_end(char *str, int n){
-    if (str == NULL)
+void move_n_first_char_to_end(char *str,int n){
+    if(str==NULL)
         return;
-    int len = strlen(str);
-    if (len == 0)
+    int len=strlen(str);
+    if(len==0)
         return;
-    if (n >= len)
+    if(n>=len)
     return;
-    char temp[len + 1];
-    int i = n;
-    while (i < len){
-        temp[i - n] = str[i];
+    char temp[len+1];
+    int i=n;
+    while(i<len){
+        temp[i-n]=str[i];
         i++;
     }
-    while (i < len + n){
-        temp[i - n] = str[i - len];
+    while(i<len+n){
+        temp[i-n]=str[i-len];
         i++;
     }
-    temp[len] = '\0';
-    strcpy(str, temp);
+    temp[len]='\0';
+    strcpy(str,temp);
 }
 void cryptemove(char *reponse){
-    char enc[MAXREP] = ""; 
-    while (strlen(reponse)>0){
-        char c= reponse[0];
+    char enc[MAXREP]="";
+    while(strlen(reponse)>0){
+        char c=reponse[0];
         char temp[2];
         temp[0]=c;
         temp[1]='\0';
@@ -42,21 +41,21 @@ void cryptemove(char *reponse){
         remove_first_char(reponse);
         int x=c%8;
         move_n_first_char_to_end(reponse,x);
-        }
-    strcpy(reponse,enc);
     }
+    strcpy(reponse,enc);
+}
 void move_last_n_char_to_first(char *str,int n){
-    if (n<0 || (unsigned long)n>strlen(str)) return;
+    if(n<0 || (unsigned long)n>strlen(str)) return;
     unsigned long i=strlen(str)-n;
     unsigned long j=0;
     char temp[MAXREP];
-    while (i<strlen(str)){
+    while(i<strlen(str)){
         temp[j]=str[i];
         j++;
         i++;
     }
     i=0;
-    while (j<strlen(str)){
+    while(j<strlen(str)){
         temp[j]=str[i];
         j++;
         i++;
@@ -66,18 +65,18 @@ void move_last_n_char_to_first(char *str,int n){
 }
 void add_char_to_beginning(char *str,char c){
     int len=strlen(str);
-    for (int i=len;i>0;i--){
+    for(int i=len;i>0;i--){
         str[i]=str[i-1];
     }
     str[0]=c;
     str[len+1]='\0';
 }
 void decryptemove(char *enc){
-    int i = strlen(enc)-1;
+    int i=strlen(enc)-1;
     char rep[MAXREP];
     rep[0]='\0';
-    while (i>=0){ 
-        char c = enc[i];
+    while(i>=0){
+        char c=enc[i];
         int x=c%8;
         move_last_n_char_to_first(rep,x);
         add_char_to_beginning(rep,c);
@@ -86,82 +85,80 @@ void decryptemove(char *enc){
     }
     strcpy(enc,rep);
 }
-int find_char_index(char *str, char c){
+int find_char_index(char *str,char c){
     int i=0;
-    while (str[i]!='\0'){
-        if (str[i]==c) return i;
+    while(str[i]!='\0'){
+        if(str[i]==c) return i;
         i++;
     }
     return -1;
 }
-void move_nth_char_to_end(char *str, int n){
-    if (str == NULL || n < 0)
+void move_nth_char_to_end(char *str,int n){
+    if(str==NULL || n<0)
         return;
-    int len = strlen(str);
-    if (n >= len)
+    int len=strlen(str);
+    if(n>=len)
         return;
-    char c = str[n];
-    int i = n;
-    while (i < len - 1){
-        str[i] = str[i + 1];
+    char c=str[n];
+    int i=n;
+    while(i<len-1){
+        str[i]=str[i+1];
         i++;
     }
-    str[len - 1] = c;
+    str[len-1]=c;
 }
 void crypteSeq(char *reponse){
     char seq[MAXREP]="";
     char enc[MAXREP]="";
-   while (reponse[0]!='\0'){
-        char c = reponse[0];
-        int x = find_char_index(seq,c);
-        if (x==-1){
+    while(reponse[0]!='\0'){
+        char c=reponse[0];
+        int x=find_char_index(seq,c);
+        if(x==-1){
             seq[strlen(seq)]=c;
             seq[strlen(seq)]='\0';
             enc[strlen(enc)]=c;
             enc[strlen(enc)]='\0';
-        } else {
-            if (x==0){
-                char d =seq[strlen(seq)-1];
+        }else{
+            if(x==0){
+                char d=seq[strlen(seq)-1];
                 enc[strlen(enc)]=d;
                 enc[strlen(enc)]='\0';
                 move_nth_char_to_end(seq,x);
-            
             } else {
-                char d = seq[x-1];
+                char d=seq[x-1];
                 enc[strlen(enc)]=d;
                 enc[strlen(enc)]='\0';
                 move_nth_char_to_end(seq,x);
-                
             }
         }
         remove_first_char(reponse);
-   }
-   strcpy(reponse,enc);
+    }
+    strcpy(reponse,enc);
 }
-void decrypteseq(char *message) {
-    char seq[MAXREP] = "";
-    char dec[MAXREP] = "";
-    while (message[0] != '\0') {
-        char d = message[0];
-        int pos = find_char_index(seq, d);
+void decrypteseq(char *message){
+    char seq[MAXREP]="";
+    char dec[MAXREP]="";
+    while(message[0]!='\0'){
+        char d=message[0];
+        int pos=find_char_index(seq,d);
         char c;
-        if (pos == -1) {
-            c = d;
-            seq[strlen(seq)] = c;
-            seq[strlen(seq)] = '\0';
+        if(pos==-1){
+            c=d;
+            seq[strlen(seq)]=c;
+            seq[strlen(seq)]='\0';
         } else {
-            int x = (pos + 1) % strlen(seq);
-            c = seq[x];
-            move_nth_char_to_end(seq, x);
+            int x=(pos+1)%strlen(seq);
+            c=seq[x];
+            move_nth_char_to_end(seq,x);
         }
-        dec[strlen(dec)] = c;
-        dec[strlen(dec)] = '\0';
+        dec[strlen(dec)]=c;
+        dec[strlen(dec)]='\0';
         remove_first_char(message);
     }
-    strcpy(message, dec);
+    strcpy(message,dec);
 }
 
-int main() {
+int main(){
 
     // Affiche les échanges avec le serveur (false pour désactiver)
     show_messages(true);
@@ -172,16 +169,16 @@ int main() {
 
     // Remplacez <identifiant> et <mot de passe> ci dessous.
     envoyer("login 12518371 RAHMANI");
-    envoyer_recevoir("load crypteSeq", reponse);
-    envoyer_recevoir("load decryptemove", reponse);
+    envoyer_recevoir("load crypteSeq",reponse);
+    envoyer_recevoir("load decryptemove",reponse);
     decryptemove(reponse);
-    printf("Réponse du serveur : %s\n", reponse);
-    envoyer_recevoir("depart", reponse);
+    printf("Réponse du serveur : %s\n",reponse);
+    envoyer_recevoir("depart",reponse);
     decryptemove(reponse);
     crypteSeq(reponse);
-    envoyer_recevoir(reponse, reponse);
+    envoyer_recevoir(reponse,reponse);
     int i=0;
-    while (reponse[i]!='\n'){
+    while(reponse[i]!='\n'){
         remove_first_char(reponse);
     }
     remove_first_char(reponse);
@@ -190,9 +187,9 @@ int main() {
     envoyer(reponse);
 
 
-    printf ("Fin d'envoi des messages.\n");
-    printf ("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
+    printf("Fin d'envoi des messages.\n");
+    printf("Pour envoyer d'autres lignes, ajouter des appels à la fonction `envoyer`\n");
     deconnexion();
-    printf ("Fin de la connection au serveur\n");
+    printf("Fin de la connection au serveur\n");
     return 0;
 }

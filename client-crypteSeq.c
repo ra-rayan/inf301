@@ -109,8 +109,8 @@ void move_nth_char_to_end(char *str, int n){
     str[len - 1] = c;
 }
 void crypteSeq(char *reponse){
-    char seq[MAXREP] = "";
-    char enc[MAXREP] = "";
+    char seq[MAXREP]="";
+    char enc[MAXREP]="";
    while (reponse[0]!='\0'){
         char c = reponse[0];
         int x = find_char_index(seq,c);
@@ -142,11 +142,11 @@ void decrypteseq(char *message) {
     char seq[MAXREP] = "";
     char dec[MAXREP] = "";
     while (message[0] != '\0') {
-        char o = message[0];
-        int pos = find_char_index(seq, o);
+        char d = message[0];
+        int pos = find_char_index(seq, d);
         char c;
         if (pos == -1) {
-            c = o;
+            c = d;
             seq[strlen(seq)] = c;
             seq[strlen(seq)] = '\0';
         } else {

@@ -138,8 +138,27 @@ void crypteSeq(char *reponse){
    }
    strcpy(reponse,enc);
 }
-void decrypteSeq(char *enc){
-
+void decrypteseq(char *message) {
+    char seq[MAXREP] = "";
+    char dec[MAXREP] = "";
+    while (message[0] != '\0') {
+        char o = message[0];
+        int pos = find_char_index(seq, o);
+        char c;
+        if (pos == -1) {
+            c = o;
+            seq[strlen(seq)] = c;
+            seq[strlen(seq)] = '\0';
+        } else {
+            int x = (pos + 1) % strlen(seq);
+            c = seq[x];
+            move_nth_char_to_end(seq, x);
+        }
+        dec[strlen(dec)] = c;
+        dec[strlen(dec)] = '\0';
+        remove_first_char(message);
+    }
+    strcpy(message, dec);
 }
 
 int main() {
@@ -154,10 +173,11 @@ int main() {
     // Remplacez <identifiant> et <mot de passe> ci dessous.
     envoyer("login 12518371 RAHMANI");
     envoyer_recevoir("load crypteSeq", reponse);
-    decrypter(reponse);
+    envoyer_recevoir("load decryptemove", reponse);
+    decryptemove(reponse);
     printf("Réponse du serveur : %s\n", reponse);
     envoyer_recevoir("depart", reponse);
-    decrypter(reponse);
+    decryptemove(reponse);
     crypteSeq(reponse);
     envoyer_recevoir(reponse, reponse);
     int i=0;
@@ -166,7 +186,8 @@ int main() {
     }
     remove_first_char(reponse);
     remove_first_char(reponse);
-    printf("Réponse du serveur : %s\n", reponse);
+    decrypteseq(reponse);
+    envoyer(reponse);
   
     envoyer(reponse);
 

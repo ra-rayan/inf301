@@ -31,7 +31,7 @@ void move_n_first_char_to_end(char *str, int n){
     temp[len] = '\0';
     strcpy(str, temp);
 }
-void crypte(char *reponse){
+void cryptemove(char *reponse){
     char enc[MAXREP] = ""; 
     while (strlen(reponse)>0){
         char c= reponse[0];
@@ -72,7 +72,7 @@ void add_char_to_beginning(char *str,char c){
     str[0]=c;
     str[len+1]='\0';
 }
-void decrypter(char *enc){
+void decryptemove(char *enc){
     int i = strlen(enc)-1;
     char rep[MAXREP];
     rep[0]='\0';
@@ -138,6 +138,10 @@ void crypteSeq(char *reponse){
    }
    strcpy(reponse,enc);
 }
+void decrypteSeq(char *enc){
+
+}
+
 int main() {
 
     // Affiche les échanges avec le serveur (false pour désactiver)
@@ -155,7 +159,17 @@ int main() {
     envoyer_recevoir("depart", reponse);
     decrypter(reponse);
     crypteSeq(reponse);
+    envoyer_recevoir(reponse, reponse);
+    int i=0;
+    while (reponse[i]!='\n'){
+        remove_first_char(reponse);
+    }
+    remove_first_char(reponse);
+    remove_first_char(reponse);
+    printf("Réponse du serveur : %s\n", reponse);
+  
     envoyer(reponse);
+
 
 
     printf ("Fin d'envoi des messages.\n");

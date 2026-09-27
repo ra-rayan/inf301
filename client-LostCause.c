@@ -84,19 +84,28 @@ void decrypteseq(char *message) {
 }
 void extraire_mdp(char *message, char *mdp) {
     char *debut = strstr(message, "actuel est");
-    int i = find_char_index(debut, '\'');
-    i = i + 1;
-    int j = 0;
-    while (debut[i] != '\'') {
-        mdp[j] = debut[i];
+    int i=find_char_index(debut, '\'');
+    i=i+1;
+    int j=0;
+    while (debut[i]!='\'') {
+        mdp[j]=debut[i];
         i++;
         j++;
     }
-    mdp[j] = '\0';
+    mdp[j]='\0';
 }
 int main(){
     char reponse[MAXREP];
-    strcpy(reponse, "Bob, mBn,,eseagmnmggtr,uvssdm,gel'diev.sLan-nd.'oep-aiaoLg-d ");
+    show_messages(true);
+    connexion("im2ag-appolab.u-ga.fr");
+    envoyer("login 12518371 RAHMANI");
+    envoyer("load LostCause");
+    envoyer_recevoir("help", reponse);
     decrypteseq(reponse);
     printf("Reponse du serveur : %s\n", reponse);
+    
+    printf ("Fin d'envoi des messages.\n");
+    deconnexion();
+    printf ("Fin de la connection au serveur\n");
+    return 0;
 }

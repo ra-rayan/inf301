@@ -187,9 +187,7 @@ int main() {
     remove_first_char(reponse);
     remove_first_char(reponse);
     decrypteseq(reponse);
-  
     envoyer(reponse);
-
 
 
     printf ("Fin d'envoi des messages.\n");

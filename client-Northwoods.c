@@ -1,5 +1,4 @@
 #include "client.h"
-
 #include <stdio.h>
 #include <ctype.h>
 #include <stdbool.h>
@@ -11,7 +10,6 @@ void remove_first_char(char *str) {
     }
     memmove(str, str + 1, strlen(str));
 }
-
 int find_char_index(char *str, char c){
     int i = 0;
     while (str[i] != '\0'){
@@ -20,7 +18,6 @@ int find_char_index(char *str, char c){
     }
     return -1;
 }
-
 void move_nth_char_to_end(char *str, int n){
     if (str == NULL || n < 0)
         return;
@@ -35,7 +32,6 @@ void move_nth_char_to_end(char *str, int n){
     }
     str[len - 1] = c;
 }
-
 void crypteSeq(char *reponse){
     char seq[MAXREP] = "";
     char enc[MAXREP] = "";
@@ -64,7 +60,6 @@ void crypteSeq(char *reponse){
     }
     strcpy(reponse, enc);
 }
-
 void decrypteseq(char *message) {
     char seq[MAXREP] = "";
     char dec[MAXREP] = "";
@@ -87,7 +82,6 @@ void decrypteseq(char *message) {
     }
     strcpy(message, dec);
 }
-
 void extraire_mdp(char *message, char *mdp) {
     char *debut = strstr(message, "actuel est");
     int i = find_char_index(debut, '\'');
@@ -100,7 +94,6 @@ void extraire_mdp(char *message, char *mdp) {
     }
     mdp[j] = '\0';
 }
-
 int main() {
     char reponse[MAXREP];
     char mdp[MAXREP];
@@ -111,16 +104,20 @@ int main() {
     envoyer("load Northwoods");
     envoyer("depart");
     envoyer_recevoir("hasta la victoria siempre", reponse);
-
     decrypteseq(reponse);
     extraire_mdp(reponse, mdp);
     envoyer_recevoir(mdp, reponse);
     decrypteseq(reponse);
-
+    printf("Reponse du serveur : %s\n", reponse);
     char rep[MAXREP];
     strcpy(rep, "There will be no Nineteen Eighty-Four");
     crypteSeq(rep);
     envoyer_recevoir(rep, reponse);
+    int i=0;
+    while (reponse[i] != '\n') {
+        remove_first_char(reponse);
+    }
+    decrypteseq(reponse);
     printf("Reponse du serveur : %s\n", reponse);
 
     printf ("Fin d'envoi des messages.\n");

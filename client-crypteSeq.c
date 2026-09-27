@@ -172,9 +172,7 @@ int main() {
 
     // Remplacez <identifiant> et <mot de passe> ci dessous.
     envoyer("login 12518371 RAHMANI");
-    envoyer_recevoir("load crypteSeq", reponse);
-    envoyer_recevoir("load decryptemove", reponse);
-    decryptemove(reponse);
+    envoyer_recevoir("load crypteSeq", reponse);    decryptemove(reponse);
     printf("Réponse du serveur : %s\n", reponse);
     envoyer_recevoir("depart", reponse);
     decryptemove(reponse);

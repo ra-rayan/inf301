@@ -81,7 +81,7 @@ void decrypter(char *enc){
         char c = enc[i];
         int x=c%8;
         move_last_n_char_to_first(rep,x);
-        add_first_char_to_beginning(rep,c);
+        add_char_to_beginning(rep,c);
         enc[i]='\0';
         i--;
     }

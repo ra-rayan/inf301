@@ -80,13 +80,13 @@ void decrypter(char *enc){
         char c = enc[i];
         int x=c%8;
         move_last_n_char_to_first(rep,x);
-        add_first_char_to_beginning(rep,c);
+        add_char_to_beginning(rep,c);
         enc[i]='\0';
         i--;
     }
     strcpy(enc,rep);
 }
-int index(char *str, char c){
+int find_char_index(char *str, char c){
     int i=0;
     while (str[i]!='\0'){
         if (str[i]==c) return i;
@@ -94,15 +94,49 @@ int index(char *str, char c){
     }
     return -1;
 }
+void move_nth_char_to_end(char *str, int n){
+    if (str == NULL || n < 0)
+        return;
+    int len = strlen(str);
+    if (n >= len)
+        return;
+    char c = str[n];
+    int i = n;
+    while (i < len - 1){
+        str[i] = str[i + 1];
+        i++;
+    }
+    str[len - 1] = c;
+}
 void crypteSeq(char *reponse){
     char seq[MAXREP] = "";
+    char enc[MAXREP] = "";
    while (reponse[0]!='\0'){
         char c = reponse[0];
-        int x = index(seq,c);
+        int x = find_char_index(seq,c);
         if (x==-1){
+            seq[strlen(seq)]=c;
+            seq[strlen(seq)]='\0';
+            enc[strlen(enc)]=c;
+            enc[strlen(enc)]='\0';
+        } else {
+            if (x==0){
+                char d =seq[strlen(seq)-1];
+                enc[strlen(enc)]=d;
+                enc[strlen(enc)]='\0';
+                move_nth_char_to_end(seq,x);
             
-
+            } else {
+                char d = seq[x-1];
+                enc[strlen(enc)]=d;
+                enc[strlen(enc)]='\0';
+                move_nth_char_to_end(seq,x);
+                
+            }
+        }
+        remove_first_char(reponse);
    }
+   strcpy(reponse,enc);
 }
 int main() {
 
@@ -117,8 +151,11 @@ int main() {
     envoyer("login 12518371 RAHMANI");
     envoyer_recevoir("load crypteSeq", reponse);
     decrypter(reponse);
+    printf("Réponse du serveur : %s\n", reponse);
     envoyer_recevoir("depart", reponse);
     decrypter(reponse);
+    crypteSeq(reponse);
+    envoyer(reponse);
 
 
     printf ("Fin d'envoi des messages.\n");

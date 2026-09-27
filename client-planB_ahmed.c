@@ -24,7 +24,7 @@ int main(){
     char reponse[MAXREP];
     char phrase[MAXREP];
 
-    envoyer("login 12518371 RAHMANI");
+    envoyer("login 12513439 JALLOULI");
     envoyer("load planB");
     envoyer("depart");
     envoyer_recevoir("aide", reponse);
